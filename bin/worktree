@@ -1,0 +1,24 @@
+#!/usr/bin/env rvm system do ruby
+# vim: set ft=ruby:
+
+require 'bundler/inline'
+gemfile do
+  source 'https://rubygems.org'
+  gem 'git'
+  gem 'tty-prompt'
+  gem 'tty-command'
+end
+
+require_relative '../lib/add'
+require_relative '../lib/remove'
+
+case ARGV[0].to_s.strip
+when 'add', 'new'
+  WorkTree::Add.new(ARGV[1]).do!
+when ''
+  puts 'required args'
+when 'remove', 'delete'
+  WorkTree::Remove.new(ARGV[1]).do!
+else
+  puts 'unknown command'
+end
