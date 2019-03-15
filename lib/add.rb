@@ -26,25 +26,25 @@ module WorkTree
           create_exrc if branch_remote != 'upstream/master'
         end
 
-        clone_db if File.exist?("../#{@branch}/config/database.yml")
-        tmux
+        # clone_db if File.exist?("../#{@branch}/config/database.yml")
+        # tmux
       end
     end
 
     private
 
-    def clone_db
-      h = YAML.load_file('config/database.yml')
-      db_name = h['development']['database']
-      db_port = h['development']['port']
-      if TTY::Prompt.new.yes?("Clone database [#{db_name}]?")
-        TTY::Command.new.run "createdb -h localhost -p #{db_port} -T #{db_name} #{@branch}_development"
-        Dir.chdir("../#{@branch}") do
-          h['development']['database'] = "#{@branch}_development"
-          File.write('config/database.yml', h.to_yaml)
-        end
-      end
-    end
+    # def clone_db
+    #   h = YAML.load_file('config/database.yml')
+    #   db_name = h['development']['database']
+    #   db_port = h['development']['port']
+    #   if TTY::Prompt.new.yes?("Clone database [#{db_name}]?")
+    #     TTY::Command.new.run "createdb -h localhost -p #{db_port} -T #{db_name} #{@branch}_development"
+    #     Dir.chdir("../#{@branch}") do
+    #       h['development']['database'] = "#{@branch}_development"
+    #       File.write('config/database.yml', h.to_yaml)
+    #     end
+    #   end
+    # end
 
     # when you are branching from different remote or remote branch
     # then creates .exrc file to make vim work properly with git
@@ -66,13 +66,13 @@ let g:pull_remote_branch = '#{branch_remote.split('/')[1]}'
       "#{Dir.pwd}/master"
     end
 
-    def tmux
-      tmux_session_name = @branch.tr('.', '-')
-      TTY::Command.new.run "tmux new-session -t #{tmux_session_name} -d", chdir: "../#{@branch}"
-      TTY::Command.new.run "tmux new-window -n vim", chdir: "../#{@branch}"
-      TTY::Command.new.run 'tmux send-keys "vim" C-m'
-      Kernel.system "tmux attach-session -t #{tmux_session_name}"
-    end
+    # def tmux
+    #   tmux_session_name = @branch.tr('.', '-')
+    #   TTY::Command.new.run "tmux new-session -t #{tmux_session_name} -d", chdir: "../#{@branch}"
+    #   TTY::Command.new.run "tmux new-window -n vim", chdir: "../#{@branch}"
+    #   TTY::Command.new.run 'tmux send-keys "vim" C-m'
+    #   Kernel.system "tmux attach-session -t #{tmux_session_name}"
+    # end
 
     def copy_files
       #we are in master now
