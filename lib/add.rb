@@ -60,7 +60,7 @@ module WorkTree
 #     end
 
     def branch_remote
-      ARGV[2] || 'origin/master'
+      ARGV[2]
     end
 
     def master_repo
