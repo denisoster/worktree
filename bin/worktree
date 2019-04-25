@@ -1,4 +1,4 @@
-#!/usr/bin/env rvm system do ruby
+#!/usr/bin/env ruby
 # vim: set ft=ruby:
 
 require 'bundler/inline'

@@ -16,15 +16,16 @@ module WorkTree
 
       git.fetch('upstream')
       git.pull('upstream', 'master')
+      git.push('origin', 'master')
 
       Dir.chdir('master') do
         # you can set branch to make worktree from
         # worktree add some-branch upstream/didww
         TTY::Command.new.run "git worktree add -b #{@branch} ../#{@branch} #{branch_remote}"
         copy_files
-        Dir.chdir("../#{@branch}") do
-          create_exrc if branch_remote != 'upstream/master'
-        end
+        # Dir.chdir("../#{@branch}") do
+        #   create_exrc if branch_remote != 'upstream/master'
+        # end
 
         # clone_db if File.exist?("../#{@branch}/config/database.yml")
         # tmux
@@ -48,18 +49,18 @@ module WorkTree
 
     # when you are branching from different remote or remote branch
     # then creates .exrc file to make vim work properly with git
-    def create_exrc
-      File.open('.exrc', 'w') do |file|
-        exrc_content = <<-EXRC
-let g:pull_remote = '#{branch_remote.split('/')[0]}'
-let g:pull_remote_branch = '#{branch_remote.split('/')[1]}'
-        EXRC
-        file.write(exrc_content)
-      end
-    end
+#     def create_exrc
+#       File.open('.exrc', 'w') do |file|
+#         exrc_content = <<-EXRC
+# let g:pull_remote = '#{branch_remote.split('/')[0]}'
+# let g:pull_remote_branch = '#{branch_remote.split('/')[1]}'
+#         EXRC
+#         file.write(exrc_content)
+#       end
+#     end
 
     def branch_remote
-      ARGV[2] || 'upstream/master'
+      ARGV[2] || 'origin/master'
     end
 
     def master_repo
