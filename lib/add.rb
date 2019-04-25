@@ -80,7 +80,11 @@ module WorkTree
       if File.exist?('../.copy_files')
         file = File.open('../.copy_files').read
         file.each_line do |line|
-          FileUtils.cp_r line.strip, "../#{@branch}/#{line.strip}"
+          if File.exist?(line.strip)
+            FileUtils.cp_r line.strip, "../#{@branch}/#{line.strip}"
+          else
+            puts "File does not exist #{line.strip}"
+          end
         end
       end
     end
